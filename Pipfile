@@ -9,6 +9,9 @@ requests = "*"
 graphene = "*"
 graphene-mongo = "*"
 haversine = "*"
+falcon = "*"
+gunicorn = "*"
+waitress = "*"
 
 [dev-packages]
 
