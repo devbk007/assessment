@@ -1,9 +1,11 @@
 import graphene
+import json
+
 from graphene_mongo import MongoengineObjectType
 from models import CountryDetails as CountryDetailsModel
 from mongoengine import connect
-import json
-from haversine import haversine, Unit
+from haversine import haversine
+from bson import ObjectId
 
 connect(db="countries", host="localhost", port=27017)
 
@@ -19,7 +21,7 @@ class Query(graphene.ObjectType):
         skip=graphene.Int(),
         )
 
-    countryQuery= graphene.Field(CountryDetail,common_name=graphene.String())
+    countryQuery= graphene.Field(CountryDetail,id=graphene.String())
 
     countriesByLanguageQuery = graphene.List(
         CountryDetail,
@@ -42,8 +44,12 @@ class Query(graphene.ObjectType):
             qs = qs[:first]
         return qs
 
-    def resolve_countryQuery(parent,info, common_name):
-        return CountryDetailsModel.objects.get(common_name=common_name)
+    def resolve_countryQuery(parent,info, id):
+        try:
+            return CountryDetailsModel.objects.get(_id=ObjectId(id))
+        except Exception as e:
+            print(e)
+
 
     def resolve_countriesByLanguageQuery(parent, info, language):
         return CountryDetailsModel.objects.filter(languages__contains=language)
@@ -107,25 +113,30 @@ schema = graphene.Schema(query=Query, auto_camelcase=False, mutation=Mutations)
 # print(json.dumps(items, indent=4))
 # print()
 
-# result = schema.execute(
-#     '''
-#     {
-#         countryQuery (common_name:"Malta"){
-#             _id
-#             common_name
-#             official_name
-#             capital
-#             languages
-#             region
-#             subregion
-#             latlng
-#             population
-#             un_member
-#             area
-#         }
-#     }
-#     '''
-# )
+result = schema.execute(
+    '''
+    {
+        countryQuery (id:"633ec4c0bf8935f51a35ba21"){
+            _id
+            common_name
+            official_name
+            capital
+            languages
+            region
+            subregion
+            latlng
+            population
+            un_member
+            area
+        }
+    }
+    '''
+)
+
+print(result.errors)
+
+items = dict(result.data.items())
+print(json.dumps(items, indent=4))
 
 # result = schema.execute(
 #     '''
@@ -166,28 +177,28 @@ schema = graphene.Schema(query=Query, auto_camelcase=False, mutation=Mutations)
 # print(json.dumps(items, indent=4))
 
 
-result = schema.execute(
-    '''
-    mutation {
-        update_country(common_name: "Iceland", official_name: "ABCD", un_member: false, population: 100, capital: "ABCD"){
-            country{
-                _id
-            common_name
-            official_name
-            capital
-            languages
-            region
-            subregion
-            latlng
-            population
-            un_member
-            area
-            }
-        }
-    }
-    '''
-)
+# result = schema.execute(
+#     '''
+#     mutation {
+#         update_country(common_name: "Iceland", official_name: "ABCD", un_member: false, population: 100, capital: "ABCD"){
+#             country{
+#                 _id
+#             common_name
+#             official_name
+#             capital
+#             languages
+#             region
+#             subregion
+#             latlng
+#             population
+#             un_member
+#             area
+#             }
+#         }
+#     }
+#     '''
+# )
 
-# print(result.errors)
-items = dict(result.data.items())
-print(json.dumps(items, indent=4))
+# # print(result.errors)
+# items = dict(result.data.items())
+# print(json.dumps(items, indent=4))
