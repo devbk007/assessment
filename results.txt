@@ -1,0 +1,342 @@
+1.	countriesQuery: Return the list of countries. The result should be paginated.
+
+Query
+    schema.execute(
+        '''
+        {
+            countriesQuery(first: 4, skip: 0){
+                _id
+                common_name
+                official_name
+                capital
+                languages
+                region
+                subregion
+                latlng
+                population
+                un_member
+                area
+            }
+        }
+        '''
+    )
+
+Output
+    {
+    "countriesQuery": [
+        {
+            "_id": "633ec4c0bf8935f51a35b9a9",
+            "common_name": "Iceland",
+            "official_name": "Iceland",       
+            "capital": "Reykjavik",
+            "languages": [
+                "Icelandic"
+            ],
+            "region": "Europe",
+            "subregion": "Northern Europe",
+            "latlng": [
+                65.0,
+                -18.0
+            ],
+            "population": 366425,
+            "un_member": true,
+            "area": 103000.0
+        },
+        {
+            "_id": "633ec4c0bf8935f51a35b9aa",
+            "common_name": "Spain",
+            "official_name": "Kingdom of Spain",
+            "capital": "Madrid",
+            "languages": [
+                "Spanish"
+            ],
+            "region": "Europe",
+            "subregion": "Southern Europe",
+            "latlng": [
+                40.0,
+                -4.0
+            ],
+            "population": 47351567,
+            "un_member": true,
+            "area": 505992.0
+        },
+        {
+            "_id": "633ec4c0bf8935f51a35b9ab",
+            "common_name": "Iraq",
+            "official_name": "Republic of Iraq",
+            "capital": "Baghdad",
+            "languages": [
+                "Arabic",
+                "Aramaic",
+                "Sorani"
+            ],
+            "region": "Asia",
+            "subregion": "Western Asia",
+            "latlng": [
+                33.0,
+                44.0
+            ],
+            "population": 40222503,
+            "un_member": true,
+            "area": 438317.0
+        },
+        {
+            "_id": "633ec4c0bf8935f51a35b9ac",
+            "common_name": "Malawi",
+            "official_name": "Republic of Malawi",
+            "capital": "Lilongwe",
+            "languages": [
+                "English",
+                "Chewa"
+            ],
+            "region": "Africa",
+            "subregion": "Eastern Africa",
+            "latlng": [
+                -13.5,
+                34.0
+            ],
+            "population": 19129955,
+            "un_member": true,
+            "area": 118484.0
+        }
+    ]
+    }
+
+2.	countryQuery: Take a country's id as an argument and return details of a single country. Raise an error if an invalid argument is provided.
+
+Input
+    schema.execute(
+    '''
+    {
+        countryQuery (id:"633ec4c0bf8935f51a35ba21"){
+            _id
+            common_name
+            official_name
+            capital
+            languages
+            region
+            subregion
+            latlng
+            population
+            un_member
+            area
+        }
+    }
+    '''
+    )
+
+Output
+    {
+    "countryQuery": {
+        "_id": "633ec4c0bf8935f51a35ba21",
+        "common_name": "Wallis and Futuna",
+        "official_name": "Territory of the Wallis and Futuna Islands",
+        "capital": "Mata-Utu",
+        "languages": [
+            "French"
+        ],
+        "region": "Oceania",
+        "subregion": "Polynesia",
+        "latlng": [
+            -13.3,
+            -176.2
+        ],
+        "population": 11750,
+        "un_member": false,
+        "area": 142.0
+    }
+}
+
+3.	countriesNearbyQuery: Take a location coordinate as input and return a list of the nearest countries.
+
+Input
+    schema.execute(
+    '''
+    {
+        countriesNearbyQuery (latlng:[47.0,20.0], distance:100){
+            _id
+            common_name
+            official_name
+            capital
+            languages
+            region
+            subregion
+            latlng
+            population
+            un_member
+            area
+        }
+    }
+    '''
+    )
+Output
+    {
+    "countriesNearbyQuery": [
+        {
+            "_id": "633ec4c0bf8935f51a35ba9b",
+            "common_name": "Hungary",
+            "official_name": "Hungary",       
+            "capital": "Budapest",
+            "languages": [
+                "Hungarian"
+            ],
+            "region": "Europe",
+            "subregion": "Central Europe",    
+            "latlng": [
+                47.0,
+                20.0
+            ],
+            "population": 9749763,
+            "un_member": true,
+            "area": 93028.0
+        }
+    ]
+    }
+
+4.	countriesByLanguageQuery: Take a language string as input and return a list of countries where the language is spoken.
+
+Input
+    schema.execute(
+    '''
+    {
+        countriesByLanguageQuery (language:"Spanish"){
+            common_name
+        }
+    }
+    '''
+    )
+
+Output
+    {
+    "countriesNearbyQuery": [
+        {
+            "_id": "633ec4c0bf8935f51a35ba9b",
+            "common_name": "Hungary",
+
+Baizel@LAPTOP-9CTBKA8H MINGW64 /w/learn/ust_assesment (master)
+$ python schema.py 
+{
+    "countriesByLanguageQuery": [       
+        {
+            "common_name": "Spain"      
+        },
+        {
+            "common_name": "Paraguay"   
+        },
+        {
+            "common_name": "Nicaragua"  
+        },
+        {
+            "common_name": "Cuba"       
+        },
+        {
+            "common_name": "El Salvador"
+        },
+        {
+            "common_name": "Uruguay"
+        },
+        {
+            "common_name": "Peru"
+        },
+        {
+            "common_name": "Guatemala"
+        },
+        {
+            "common_name": "Guam"
+        },
+        {
+            "common_name": "Western Sahara"
+        },
+        {
+            "common_name": "Panama"
+        },
+        {
+            "common_name": "Costa Rica"
+        },
+        {
+            "common_name": "Venezuela"
+        },
+        {
+            "common_name": "Colombia"
+        },
+        {
+            "common_name": "Belize"
+        },
+        {
+            "common_name": "Bolivia"
+        },
+        {
+            "common_name": "Equatorial Guinea"
+        },
+        {
+            "common_name": "Mexico"
+        },
+        {
+            "common_name": "Argentina"
+        },
+        {
+            "common_name": "Chile"
+        },
+        {
+            "common_name": "Puerto Rico"
+        },
+        {
+            "common_name": "Honduras"
+        },
+        {
+            "common_name": "Dominican Republic"
+        },
+        {
+            "common_name": "Ecuador"
+        }
+    ]
+    }
+
+5.	countryEditMutation: Create a mutation to edit a specific country's details (at least 4 fields) and it should return the edited data.
+
+Input
+    schema.execute(
+    '''
+    mutation {
+        update_country(common_name: "Iceland", official_name: "ABCD", un_member: false, population: 100, capital: "ABCD"){
+            country{
+                _id
+            common_name
+            official_name
+            capital
+            languages
+            region
+            subregion
+            latlng
+            population
+            un_member
+            area
+            }
+        }
+    }
+    '''
+    )
+
+Output
+    {
+    "update_country": {
+        "country": {
+            "_id": "633ec4c0bf8935f51a35b9a9",
+            "common_name": "Iceland",
+            "official_name": "ABCD",
+            "capital": "ABCD",
+            "languages": [
+                "Icelandic"
+            ],
+            "region": "Europe",
+            "subregion": "Northern Europe",   
+            "latlng": [
+                65.0,
+                -18.0
+            ],
+            "population": 100,
+            "un_member": false,
+            "area": 103000.0
+        }
+    }
+    }
