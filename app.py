@@ -14,11 +14,12 @@ data=z.json()
 
 for i in data:
     try:
+        languages = list(i["languages"].values())
         country = CountryDetails(
             common_name = i["name"]["common"],
             official_name = i["name"]["official"],
             capital = i["capital"][0],
-            languages = i["languages"],
+            languages = languages,
             region = i["region"],
             subregion = i["subregion"],
             latlng = i["latlng"],
@@ -28,7 +29,8 @@ for i in data:
         )
         country.save()
 
-    except:
+    except Exception as e:
+        print(e)
         continue
 
 print("Successfully entered data in the database")
