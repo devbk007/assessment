@@ -8,6 +8,7 @@ mongoengine = "*"
 requests = "*"
 graphene = "*"
 graphene-mongo = "*"
+haversine = "*"
 
 [dev-packages]
 
