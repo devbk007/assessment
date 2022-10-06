@@ -7,11 +7,9 @@ from haversine import haversine, Unit
 
 connect(db="countries", host="localhost", port=27017)
 
-
 class CountryDetail(MongoengineObjectType):
     class Meta:
         model = CountryDetailsModel
-        # filter_fields = ['fisrt_name']
 
 class Query(graphene.ObjectType):
 
@@ -59,9 +57,30 @@ class Query(graphene.ObjectType):
                 nearby_countries.append(e.common_name)
 
         return CountryDetailsModel.objects.filter(common_name__in=nearby_countries)
-        # return CountryDetailsModel.objects.all()
 
-schema = graphene.Schema(query=Query, auto_camelcase=False)
+class countryEditMutation(graphene.Mutation):
+    class Arguments:
+        common_name = graphene.String()
+        official_name = graphene.String()
+        un_member = graphene.Boolean()
+        population = graphene.Int()
+        capital = graphene.String()
+    
+    country = graphene.Field(CountryDetail)
+
+    def mutate(self, info, common_name, official_name, un_member, population, capital):
+        country = CountryDetailsModel.objects.get(common_name=common_name)
+        country.official_name = official_name
+        country.un_member = un_member
+        country.population = population
+        country.capital = capital
+
+        return countryEditMutation(country=country)
+
+class Mutations(graphene.ObjectType):
+    update_country = countryEditMutation.Field()
+
+schema = graphene.Schema(query=Query, auto_camelcase=False, mutation=Mutations)
 
 # result = schema.execute(
 #     '''
@@ -122,11 +141,37 @@ schema = graphene.Schema(query=Query, auto_camelcase=False)
 # items = dict(result.data.items())
 # print(json.dumps(items, indent=4))
 
+# result = schema.execute(
+#     '''
+#     {
+#         countriesNearbyQuery (latlng:[47.0,20.0], distance:100){
+#             _id
+#             common_name
+#             official_name
+#             capital
+#             languages
+#             region
+#             subregion
+#             latlng
+#             population
+#             un_member
+#             area
+#         }
+#     }
+#     '''
+# )
+
+# print(result.errors)
+# items = dict(result.data.items())
+# print(json.dumps(items, indent=4))
+
+
 result = schema.execute(
     '''
-    {
-        countriesNearbyQuery (latlng:[47.0,20.0], distance:100){
-            _id
+    mutation {
+        update_country(common_name: "Iceland", official_name: "ABCD", un_member: false, population: 100, capital: "ABCD"){
+            country{
+                _id
             common_name
             official_name
             capital
@@ -137,6 +182,7 @@ result = schema.execute(
             population
             un_member
             area
+            }
         }
     }
     '''
