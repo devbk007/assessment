@@ -12,6 +12,9 @@ haversine = "*"
 falcon = "*"
 gunicorn = "*"
 waitress = "*"
+uvicorn = "*"
+starlette = "==0.16.0"
+fastapi = "*"
 
 [dev-packages]
 
