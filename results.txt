@@ -207,14 +207,6 @@ Input
     )
 
 Output
-    {
-    "countriesNearbyQuery": [
-        {
-            "_id": "633ec4c0bf8935f51a35ba9b",
-            "common_name": "Hungary",
-
-Baizel@LAPTOP-9CTBKA8H MINGW64 /w/learn/ust_assesment (master)
-$ python schema.py 
 {
     "countriesByLanguageQuery": [       
         {
